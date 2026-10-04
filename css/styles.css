@@ -136,28 +136,29 @@ a { color: inherit; }
   text-align: center;
 }
 
-/* ultra-subtle backdrop: 1px grid fading out + a faint top glow.
-   Anchored to the hero itself so it starts flush under the nav. */
+/* Square grid behind the hero: 1px lines fading out + a faint top glow.
+   Reaches up behind the translucent nav (which blurs whatever is under it)
+   and down past the copy, so the squares read as one field, not a band. */
 .hero-backdrop {
   position: absolute;
   z-index: 0;
-  top: 0;
+  top: -88px;
+  bottom: -32px;
   left: 0;
   right: 0;
-  height: 420px;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
   background-size: 56px 56px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 70%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 95%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 95%);
 }
 .hero-backdrop::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 55% 55% at 50% 0%, rgba(255, 255, 255, .05), rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(ellipse 55% 55% at 50% 12%, rgba(255, 255, 255, .05), rgba(255, 255, 255, 0) 70%);
 }
 
 .hero h1 {
