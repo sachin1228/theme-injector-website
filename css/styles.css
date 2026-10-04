@@ -1,0 +1,533 @@
+/* ============================================================
+   Theme Injector — marketing site stylesheet
+   Design language mirrors the Theme Injector desktop app
+   (black canvas, Vercel-shaped grey ramp, hairlines, white marks)
+   ============================================================ */
+
+:root {
+  --bg: #000;
+  --surface: #0a0a0a;
+  --surface-2: #111;
+  --surface-3: #1a1a1a;
+  --line: #1f1f1f;
+  --line-strong: #2e2e2e;
+  --text: #ededed;
+  --text-2: #a0a0a0;
+  --muted: #878787;
+  --faint: #5c5c5c;
+  --mark: #f5f5f5;
+  --ok: #00ab3e;
+  --warn: #ffb200;
+  --err: #f13242;
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius-btn: 6px;
+  --radius-card: 12px;
+  --nav-h: 64px;
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; background: var(--bg); }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip; /* safety net: never a horizontal scrollbar */
+}
+
+::selection { background: var(--mark); color: var(--bg); }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--mark);
+}
+
+[hidden] { display: none !important; }
+
+/* ============================================================
+   1. Sticky nav
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, .78);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: var(--nav-h);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* the app's brand lockup: mark + name + "for Freebuff" tag */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+  white-space: nowrap;
+}
+.nav-brand .brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: #0a0909;
+  display: block;
+  flex: 0 0 auto;
+}
+.nav-brand .brand-name { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
+.nav-brand .brand-tag {
+  font-size: 12px;
+  color: var(--faint);
+  padding-left: 10px;
+  margin-left: 1px;
+  border-left: 1px solid var(--line-strong);
+}
+
+.nav-cta {
+  margin-left: auto;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 13px;
+  background: var(--mark);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-btn);
+  text-decoration: none;
+  transition: background-color .14s ease;
+}
+.nav-cta:hover { background: #fff; }
+
+/* ============================================================
+   2. Hero
+   ============================================================ */
+.hero { padding: 88px 24px 0; }
+
+.hero-copy {
+  position: relative;
+  z-index: 0; /* stacking context for the backdrop */
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ultra-subtle backdrop: 1px grid fading out + a faint top glow */
+.hero-backdrop {
+  position: absolute;
+  z-index: -1;
+  top: -88px;
+  bottom: -32px;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 70%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 70%);
+}
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 55% at 50% 0%, rgba(255, 255, 255, .05), rgba(255, 255, 255, 0) 70%);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-2);
+}
+.eyebrow::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mark);
+}
+
+.hero h1 {
+  margin: 24px auto 0;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--text);
+}
+
+.hero .sub {
+  margin: 20px auto 0;
+  max-width: 640px;
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--text-2);
+}
+
+/* --- CTA row: the three download buttons --- */
+.cta-row {
+  margin: 40px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+
+.dl-btn {
+  height: 56px;
+  border-radius: 8px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color .14s ease, border-color .14s ease;
+}
+.dl-btn svg { width: 18px; height: 18px; flex: none; display: block; }
+.dl-text { display: flex; flex-direction: column; text-align: left; }
+.dl-name { font-size: 14px; font-weight: 500; line-height: 1.3; letter-spacing: -0.005em; }
+.dl-meta { font-size: 11px; font-weight: 400; line-height: 1.3; }
+
+/* primary — white mark on black, the app's key action */
+.dl-btn.primary { background: var(--mark); color: var(--bg); border-color: var(--mark); }
+.dl-btn.primary .dl-meta { color: #5c5c5c; }
+.dl-btn.primary:hover { background: #fff; border-color: #fff; }
+
+/* secondary — surface-3 + hairline, the app's default control */
+.dl-btn.secondary { background: var(--surface-3); color: var(--text); border-color: var(--line-strong); }
+.dl-btn.secondary .dl-meta { color: var(--muted); }
+.dl-btn.secondary:hover { background: #242424; border-color: #3d3d3d; }
+
+.microcopy {
+  margin: 16px auto 0;
+  font-size: 13px;
+  color: var(--faint);
+}
+
+/* ============================================================
+   3. Hero media — the app, actually running
+   ============================================================ */
+.hero-media {
+  max-width: 1060px;
+  margin: 56px auto 0;
+}
+
+.video-frame {
+  position: relative;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  background: var(--bg);
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .7);
+}
+
+.video-frame video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* play affordance — only shown when autoplay is off (reduced motion / blocked) */
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, .28);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.play-overlay .play-stack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.play-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--mark);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .55);
+  transition: background-color .14s ease;
+}
+.play-overlay:hover .play-circle { background: #fff; }
+.play-circle svg { width: 20px; height: 20px; display: block; margin-left: 3px; }
+.play-label { font-size: 13px; font-weight: 500; color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .8); }
+
+/* ============================================================
+   4. Download modals (unsigned first-launch guides)
+   ============================================================ */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 200;
+}
+
+.modal {
+  width: min(560px, 100%);
+  max-height: min(86vh, 780px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .7);
+  padding: 22px 24px 0;
+}
+
+.m-title {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.014em;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.m-title .ok-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ok);
+  flex: none;
+}
+.m-file {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.m-file b { color: var(--text-2); font-weight: 500; }
+.m-sub {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+.m-callout {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 14px 0 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.m-callout svg { width: 15px; height: 15px; flex: none; margin-top: 2px; }
+.m-callout b { color: var(--text); font-weight: 500; }
+
+.m-h {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 22px 0 12px;
+}
+.m-h:first-of-type { margin-top: 4px; }
+
+/* numbered steps — the app's "where to find it" pattern */
+.m-steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 10px; }
+.m-steps li {
+  counter-increment: step;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+.m-steps li::before {
+  content: counter(step);
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  margin-top: 1px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.m-steps b { color: var(--text); font-weight: 500; }
+
+.m-hint { display: block; font-size: 12px; color: var(--faint); margin-top: 3px; }
+
+.step-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+
+/* code block + copy */
+.code-row {
+  position: relative;
+  margin: 10px 0 0;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+}
+.code-row code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-2);
+  padding: 11px 74px 11px 13px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.code-row .copy-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+}
+
+.btn {
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  border-radius: var(--radius-btn);
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color .14s ease, border-color .14s ease;
+}
+.btn:hover { background: #242424; }
+.btn.primary { background: var(--mark); border-color: var(--mark); color: var(--bg); }
+.btn.primary:hover { background: #fff; }
+.btn.small { padding: 4px 9px; font-size: 11.5px; }
+
+/* watch-it-done video rows */
+.vid-list { display: flex; flex-direction: column; gap: 8px; }
+.vid-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color .14s ease, border-color .14s ease;
+}
+.vid-row:hover { background: var(--surface-2); border-color: var(--line-strong); }
+.vid-play {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-3);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.vid-play svg { width: 9px; height: 9px; display: block; margin-left: 1px; }
+.vid-text { min-width: 0; }
+.vid-title { display: block; font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
+.vid-meta { display: block; font-size: 11.5px; color: var(--faint); line-height: 1.4; }
+
+/* sticky footer: "Got it" stays reachable while the steps scroll */
+.m-actions {
+  position: sticky;
+  bottom: 0;
+  margin: 22px -24px 0;
+  padding: 14px 24px 20px;
+  background: linear-gradient(to top, var(--surface) 82%, rgba(10, 10, 10, 0));
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ============================================================
+   5. Footer
+   ============================================================ */
+.footer { margin-top: 128px; border-top: 1px solid var(--line); padding: 40px 24px 52px; }
+.footer-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-copy { font-size: 13px; color: var(--faint); }
+.footer-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--faint); }
+.footer-meta .sep { color: var(--line-strong); }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 720px) {
+  .hero { padding-top: 64px; }
+
+  /* stack downloads: primary first */
+  .cta-row { flex-direction: column; align-items: stretch; max-width: 440px; }
+  .dl-btn { width: 100%; }
+  .dl-btn.primary { order: -1; }
+}
+
+@media (max-width: 560px) {
+  .hero { padding: 48px 16px 0; }
+  .nav-inner { padding: 0 16px; gap: 16px; }
+  .nav-brand .brand-tag { display: none; }
+  .hero-media { margin-top: 40px; }
+  .footer { margin-top: 96px; padding: 32px 16px 44px; }
+  .modal { padding: 18px 16px 0; }
+  .m-actions { margin: 18px -16px 0; padding: 12px 16px 16px; }
+}
+
+/* Respect reduced motion: no smooth scroll; the video is handled in JS */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .dl-btn, .btn, .vid-row, .nav-cta, .play-circle { transition: none; }
+}
