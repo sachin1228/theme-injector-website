@@ -140,9 +140,7 @@ a { color: inherit; }
 
 /* Square grid behind the hero: 1px lines fading out + a faint top glow.
    Reaches up behind the translucent nav (which blurs whatever is under it)
-   and down past the copy, so the squares read as one field, not a band.
-   Alpha is deliberately high: at .055 the lines measured ~13/255 on screen,
-   which is invisible on a bright display and in screenshots. */
+   and down past the copy, so the squares read as one field, not a band. */
 .hero-backdrop {
   position: absolute;
   z-index: 0;
@@ -152,11 +150,11 @@ a { color: inherit; }
   right: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, .12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, .12) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
   background-size: 56px 56px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 98%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 98%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 95%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 95%);
 }
 .hero-backdrop::after {
   content: "";
