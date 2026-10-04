@@ -243,9 +243,9 @@ a { color: inherit; }
   height: auto;
 }
 
-/* Centre play control. On the poster it is the call to action; while the
-   recording plays it steps out of the way and only comes back on hover,
-   keyboard focus or pointer activity — nothing sits over the content.
+/* Centre play control. On the poster it is the call to action; the press
+   leaves the pause button up for two seconds, then it steps out of the way
+   for the rest of the recording — pointer position never brings it back.
    The click handler lives on the overlay, so the frame stays clickable
    (click = pause) even while the circle is invisible. */
 .play-overlay {
@@ -268,13 +268,8 @@ a { color: inherit; }
 .play-overlay.is-playing { background: transparent; }
 .play-overlay.is-playing .play-circle { opacity: 0; transform: scale(.92); pointer-events: none; }
 .play-overlay.is-playing .play-label { visibility: hidden; }
-.play-overlay.is-playing:hover .play-circle,
 .play-overlay.is-playing:focus-visible .play-circle,
 .play-overlay.is-playing.show-controls .play-circle { opacity: 1; transform: none; }
-/* touch has no hover to reveal with, so the control stays put while playing */
-@media (hover: none) {
-  .play-overlay.is-playing .play-circle { opacity: .9; transform: none; }
-}
 /* the circle is the thing that must sit dead-centre in the frame, so the
    caption floats below it instead of joining a flex stack that would
    push the circle up */

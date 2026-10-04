@@ -64,9 +64,9 @@
     overlay.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
   }
 
-  /* While the recording plays the control steps out of the way: it shows for
-     a moment after the press — so the pause button is visibly there — and
-     then fades out. A moving pointer brings it back for the same beat. */
+  /* After the press the control stays up for two seconds so the pause button
+     is visibly there, then it steps out for good — moving the cursor around
+     the player must NOT bring it back. */
   var HIDE_AFTER = 2000;
   var hideControlsTimer;
 
@@ -99,9 +99,6 @@
       setPlayingUI(false);
       if (playLabel) playLabel.textContent = 'Replay preview · 19 s';
     });
-
-    overlay.addEventListener('mousemove', revealControls);
-    overlay.addEventListener('mouseleave', dropControls);
 
     overlay.addEventListener('click', function () {
       if (video.paused) {
