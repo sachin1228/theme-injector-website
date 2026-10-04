@@ -91,13 +91,13 @@
          poster state is consistent before the control fades away */
       revealControls();
       /* replaying from the start: the caption goes back to plain "Play" */
-      if (playLabel) playLabel.textContent = 'Play preview · 19 s';
+      if (playLabel) playLabel.textContent = 'Play preview · 18 s';
     });
     video.addEventListener('pause', function () { setPlayingUI(false); });
     video.addEventListener('error', function () { setPlayingUI(false); });
     video.addEventListener('ended', function () {
       setPlayingUI(false);
-      if (playLabel) playLabel.textContent = 'Replay preview · 19 s';
+      if (playLabel) playLabel.textContent = 'Replay preview · 18 s';
     });
 
     overlay.addEventListener('click', function () {
