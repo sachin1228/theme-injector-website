@@ -25,6 +25,16 @@ buttons on the page link straight to:
 
 `https://github.com/sachin1228/theme-injector-website/releases/download/v1.0.0/<file>`
 
+| Asset (exact name matters) | Size | Platform |
+| --- | --- | --- |
+| `ThemeInjector-1.0.0-windows-x64.exe` | 93 MB | Windows 10/11 x64 (NSIS) |
+| `ThemeInjector-1.0.0-macos-arm64.dmg` | 113 MB | macOS · Apple Silicon |
+| `ThemeInjector-1.0.0-macos-intel.dmg` | 118 MB | macOS · Intel |
+
+The three `href`s in `index.html`, the `data-file` labels on the buttons and the
+text inside the download modals all quote these names, so an asset must be
+uploaded under exactly the name it links to.
+
 Builds are unsigned. Each download button opens a per-platform modal with the
 first-launch approval steps (Windows SmartScreen / macOS Gatekeeper).
 
@@ -35,6 +45,10 @@ python3 -m http.server 8765
 # open http://127.0.0.1:8765/
 ```
 
+(Python's server ignores HTTP range requests, so the hero video can't be
+scrubbed locally — playback from the start works fine. Any range-capable static
+server behaves like production.)
+
 ## Deploy (Vercel)
 
 1. Import `sachin1228/theme-injector-website` at vercel.com/new
@@ -43,15 +57,30 @@ python3 -m http.server 8765
 
 ## Publishing a release
 
-Run once from this folder:
+The installers are built in the app repo,
+`/Users/sachin/Documents/GitHub/freebuff-theme-injector/release/`.
+
+**In the browser** (no tooling needed): create the public repo
+`sachin1228/theme-injector-website` and push `main`, then open
+*Releases → Draft a new release*, set the tag to `v1.0.0`, drag the three files
+above into the assets box, and publish. The buttons on the site work the moment
+the assets are there.
+
+**From the CLI** instead:
 
 ```sh
 bash scripts/publish-github.sh
 ```
 
-It creates the public repo, pushes `main`, and attaches the three installers from
-`theme-studio/dist/` to release `v1.0.0`. Requires the
+It creates the repo, pushes `main`, and attaches the three installers from the
+app's `release/` folder to release `v1.0.0`. Requires the
 [gh CLI](https://cli.github.com) and `gh auth login`.
+
+### Version bumps
+
+Rebuild the app, upload the new assets to a new tag, then update in `index.html`:
+the tag in the three `href`s, the three filenames, the `data-file` / `data-size`
+attributes, the visible `.dl-meta` sizes, and the Windows modal's file line.
 
 ## License
 
