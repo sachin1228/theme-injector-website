@@ -238,8 +238,11 @@ a { color: inherit; }
   height: auto;
 }
 
-/* centre play/pause control — always present; the scrim sits behind the
-   poster state and clears while the video plays */
+/* Centre play control. On the poster it is the call to action; while the
+   recording plays it steps out of the way and only comes back on hover,
+   keyboard focus or pointer activity — nothing sits over the content.
+   The click handler lives on the overlay, so the frame stays clickable
+   (click = pause) even while the circle is invisible. */
 .play-overlay {
   position: absolute;
   inset: 0;
@@ -252,8 +255,21 @@ a { color: inherit; }
   font-family: inherit;
   transition: background-color .18s ease;
 }
+.play-overlay .play-circle {
+  opacity: 1;
+  transform: none;
+  transition: opacity .18s ease, transform .18s ease, background-color .14s ease;
+}
 .play-overlay.is-playing { background: transparent; }
+.play-overlay.is-playing .play-circle { opacity: 0; transform: scale(.92); pointer-events: none; }
 .play-overlay.is-playing .play-label { visibility: hidden; }
+.play-overlay.is-playing:hover .play-circle,
+.play-overlay.is-playing:focus-visible .play-circle,
+.play-overlay.is-playing.show-controls .play-circle { opacity: 1; transform: none; }
+/* touch has no hover to reveal with, so the control stays put while playing */
+@media (hover: none) {
+  .play-overlay.is-playing .play-circle { opacity: .9; transform: none; }
+}
 /* the circle is the thing that must sit dead-centre in the frame, so the
    caption floats below it instead of joining a flex stack that would
    push the circle up */
@@ -266,7 +282,6 @@ a { color: inherit; }
   display: grid;
   place-items: center;
   box-shadow: 0 8px 32px rgba(0, 0, 0, .55);
-  transition: background-color .14s ease;
 }
 .play-overlay:hover .play-circle { background: #fff; }
 .play-circle svg { width: 20px; height: 20px; display: block; }

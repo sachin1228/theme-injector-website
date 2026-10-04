@@ -39,8 +39,9 @@
   }
 
   /* ---------------- hero video ----------------
-     Click-to-play: the video never autoplays. The centre button is the
-     single play/pause control, and one playthrough ends paused. */
+     Click-to-play: the video never autoplays. The centre button starts it,
+     then hides itself while the recording runs (hover or a moving pointer
+     brings the pause control back), and one playthrough ends paused. */
   var video = document.getElementById('heroVideo');
   var overlay = document.getElementById('playOverlay');
   var playLabel = document.getElementById('playLabel');
@@ -56,9 +57,29 @@
     overlay.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
   }
 
+  /* While playing, the control is hidden by CSS and only a live pointer
+     brings it back — and it fades out again after a moment of stillness so
+     a resting cursor doesn't keep it on screen. */
+  var hideControlsTimer;
+
+  function revealControls() {
+    if (!overlay || !video || video.paused) return;
+    overlay.classList.add('show-controls');
+    clearTimeout(hideControlsTimer);
+    hideControlsTimer = setTimeout(function () {
+      overlay.classList.remove('show-controls');
+    }, 2400);
+  }
+
+  function dropControls() {
+    clearTimeout(hideControlsTimer);
+    if (overlay) overlay.classList.remove('show-controls');
+  }
+
   if (video && overlay) {
     video.addEventListener('playing', function () {
       setPlayingUI(true);
+      dropControls();
       /* replaying from the start: the caption goes back to plain "Play" */
       if (playLabel) playLabel.textContent = 'Play preview · 19 s';
     });
@@ -68,6 +89,9 @@
       setPlayingUI(false);
       if (playLabel) playLabel.textContent = 'Replay preview · 19 s';
     });
+
+    overlay.addEventListener('mousemove', revealControls);
+    overlay.addEventListener('mouseleave', dropControls);
 
     overlay.addEventListener('click', function () {
       if (video.paused) {
