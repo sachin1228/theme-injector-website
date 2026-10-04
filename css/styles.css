@@ -159,26 +159,6 @@ a { color: inherit; }
   background: radial-gradient(ellipse 55% 55% at 50% 0%, rgba(255, 255, 255, .05), rgba(255, 255, 255, 0) 70%);
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 26px;
-  padding: 0 12px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: var(--surface);
-  font-size: 12px;
-  color: var(--text-2);
-}
-.eyebrow::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--mark);
-}
-
 .hero h1 {
   margin: 24px auto 0;
   font-size: clamp(40px, 6vw, 72px);
@@ -233,12 +213,6 @@ a { color: inherit; }
 .dl-btn.secondary { background: var(--surface-3); color: var(--text); border-color: var(--line-strong); }
 .dl-btn.secondary .dl-meta { color: var(--muted); }
 .dl-btn.secondary:hover { background: #242424; border-color: #3d3d3d; }
-
-.microcopy {
-  margin: 16px auto 0;
-  font-size: 13px;
-  color: var(--faint);
-}
 
 /* ============================================================
    3. Hero media — the app, actually running
