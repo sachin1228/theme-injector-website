@@ -38,9 +38,9 @@
        2. Hero
        ============================================================ -->
   <section class="hero">
-    <div class="hero-copy">
-      <div class="hero-backdrop" aria-hidden="true"></div>
+    <div class="hero-backdrop" aria-hidden="true"></div>
 
+    <div class="hero-copy">
       <h1>Freebuff, in your colors.</h1>
 
       <p class="sub">Add themes to your Freebuff desktop app with Theme Injector.<br>Eight hand-tuned themes — Figma, Linear, Netflix and more.</p>
@@ -90,26 +90,21 @@
     <div class="hero-media">
       <div class="video-frame">
         <video id="heroVideo" width="1600" height="1000" poster="assets/hero-poster.jpg"
-               muted loop playsinline autoplay preload="auto"
+               muted playsinline preload="metadata"
                aria-label="Screen recording: turning on Theme Injector, Freebuff restarting with a Themes panel in its sidebar, and a theme being applied.">
           <source src="assets/hero.mp4" type="video/mp4">
         </video>
-        <button class="play-overlay" id="playOverlay" type="button" hidden>
+        <button class="play-overlay" id="playOverlay" type="button" aria-label="Play preview">
           <span class="play-stack">
             <span class="play-circle">
-              <svg viewBox="0 0 16 16" fill="#000" aria-hidden="true"><path d="M4 2.5 13.5 8 4 13.5z"/></svg>
+              <svg class="icon-play" id="iconPlay" viewBox="0 0 16 16" fill="#000" aria-hidden="true"><path d="M4 2.5 13.5 8 4 13.5z"/></svg>
+              <svg class="icon-pause" id="iconPause" viewBox="0 0 16 16" fill="#000" aria-hidden="true">
+                <rect x="3" y="2.5" width="3.4" height="11" rx="1.1"/>
+                <rect x="9.6" y="2.5" width="3.4" height="11" rx="1.1"/>
+              </svg>
             </span>
-            <span class="play-label">Play preview · 19&thinsp;s</span>
+            <span class="play-label" id="playLabel">Play preview · 19&thinsp;s</span>
           </span>
-        </button>
-        <button class="video-toggle" id="videoToggle" type="button" aria-label="Pause preview">
-          <svg class="icon-pause" id="iconPause" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <rect x="3" y="2.5" width="3.4" height="11" rx="1.1"/>
-            <rect x="9.6" y="2.5" width="3.4" height="11" rx="1.1"/>
-          </svg>
-          <svg class="icon-play" id="iconPlay" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" hidden>
-            <path d="M4 2.5 13.5 8 4 13.5z"/>
-          </svg>
         </button>
       </div>
     </div>

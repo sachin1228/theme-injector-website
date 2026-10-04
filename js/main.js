@@ -6,8 +6,6 @@
 (function () {
   'use strict';
 
-  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-
   /* ---------------- platform highlight ----------------
      Promote the least-friction build for the visitor:
      Windows -> the .exe, Mac -> Apple Silicon .dmg (then
@@ -41,55 +39,44 @@
   }
 
   /* ---------------- hero video ----------------
-     Autoplay muted; under reduced motion stay paused on the
-     poster and expose a play button instead. */
+     Click-to-play: the video never autoplays. The centre button is the
+     single play/pause control, and one playthrough ends paused. */
   var video = document.getElementById('heroVideo');
   var overlay = document.getElementById('playOverlay');
-  var toggle = document.getElementById('videoToggle');
-  var iconPlay = document.getElementById('iconPlay');
-  var iconPause = document.getElementById('iconPause');
+  var playLabel = document.getElementById('playLabel');
 
-  function showOverlay() { if (overlay) overlay.hidden = false; }
-  function hideOverlay() { if (overlay) overlay.hidden = true; }
-
-  /* corner play/pause control: icon + label follow the real state */
-  function setToggle(playing) {
-    if (toggle) toggle.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
-    if (iconPlay) iconPlay.hidden = playing;
-    if (iconPause) iconPause.hidden = !playing;
+  /* The .is-playing class is the single source of truth: CSS swaps the play
+     glyph for the pause glyph, clears the scrim and hides the caption.
+     (Toggling `.hidden` on the <svg> icons would be a no-op — SVG elements
+     have no such IDL property.) */
+  function setPlayingUI(playing) {
+    if (!overlay) return;
+    if (playing) overlay.classList.add('is-playing');
+    else overlay.classList.remove('is-playing');
+    overlay.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
   }
 
-  if (video) {
-    video.addEventListener('playing', function () { hideOverlay(); setToggle(true); });
-    video.addEventListener('pause', function () { showOverlay(); setToggle(false); });
-    video.addEventListener('error', function () { showOverlay(); setToggle(false); });
+  if (video && overlay) {
+    video.addEventListener('playing', function () {
+      setPlayingUI(true);
+      /* replaying from the start: the caption goes back to plain "Play" */
+      if (playLabel) playLabel.textContent = 'Play preview · 19 s';
+    });
+    video.addEventListener('pause', function () { setPlayingUI(false); });
+    video.addEventListener('error', function () { setPlayingUI(false); });
+    video.addEventListener('ended', function () {
+      setPlayingUI(false);
+      if (playLabel) playLabel.textContent = 'Replay preview · 19 s';
+    });
 
-    if (reduceMotion) {
-      video.removeAttribute('autoplay');
-      video.pause();
-      showOverlay();
-    } else {
-      var pr = video.play();
-      if (pr && pr.catch) pr.catch(function () { showOverlay(); setToggle(false); }); // autoplay refused -> offer the button
-    }
-
-    if (overlay) {
-      overlay.addEventListener('click', function () {
+    overlay.addEventListener('click', function () {
+      if (video.paused) {
         var p = video.play();
         if (p && p.catch) p.catch(function () {});
-      });
-    }
-
-    if (toggle) {
-      toggle.addEventListener('click', function () {
-        if (video.paused) {
-          var p = video.play();
-          if (p && p.catch) p.catch(function () {});
-        } else {
-          video.pause();
-        }
-      });
-    }
+      } else {
+        video.pause();
+      }
+    });
   }
 
   /* ---------------- download modals ---------------- */

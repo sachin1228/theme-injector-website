@@ -126,24 +126,25 @@ a { color: inherit; }
 /* ============================================================
    2. Hero
    ============================================================ */
-.hero { padding: 88px 24px 0; }
+.hero { position: relative; padding: 88px 24px 0; }
 
 .hero-copy {
   position: relative;
-  z-index: 0; /* stacking context for the backdrop */
+  z-index: 1; /* above the grid backdrop */
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
 }
 
-/* ultra-subtle backdrop: 1px grid fading out + a faint top glow */
+/* ultra-subtle backdrop: 1px grid fading out + a faint top glow.
+   Anchored to the hero itself so it starts flush under the nav. */
 .hero-backdrop {
   position: absolute;
-  z-index: -1;
-  top: -88px;
-  bottom: -32px;
-  left: calc(50% - 50vw);
-  right: calc(50% - 50vw);
+  z-index: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 420px;
   pointer-events: none;
   background-image:
     linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
@@ -237,7 +238,8 @@ a { color: inherit; }
   height: auto;
 }
 
-/* play affordance — only shown when autoplay is off (reduced motion / blocked) */
+/* centre play/pause control — always present; the scrim sits behind the
+   poster state and clears while the video plays */
 .play-overlay {
   position: absolute;
   inset: 0;
@@ -248,8 +250,14 @@ a { color: inherit; }
   padding: 0;
   cursor: pointer;
   font-family: inherit;
+  transition: background-color .18s ease;
 }
-.play-overlay .play-stack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.play-overlay.is-playing { background: transparent; }
+.play-overlay.is-playing .play-label { visibility: hidden; }
+/* the circle is the thing that must sit dead-centre in the frame, so the
+   caption floats below it instead of joining a flex stack that would
+   push the circle up */
+.play-overlay .play-stack { position: relative; display: grid; place-items: center; }
 .play-circle {
   width: 64px;
   height: 64px;
@@ -261,32 +269,24 @@ a { color: inherit; }
   transition: background-color .14s ease;
 }
 .play-overlay:hover .play-circle { background: #fff; }
-.play-circle svg { width: 20px; height: 20px; display: block; margin-left: 3px; }
-.play-label { font-size: 13px; font-weight: 500; color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .8); }
-
-/* play/pause control pinned to the frame corner — always visible */
-.video-toggle {
+.play-circle svg { width: 20px; height: 20px; display: block; }
+/* which glyph shows is driven purely by the .is-playing class: SVG elements
+   have no `hidden` IDL property, so setting one in JS would do nothing */
+.play-circle .icon-play { margin-left: 3px; }
+.play-circle .icon-pause { display: none; }
+.play-overlay.is-playing .play-circle .icon-play { display: none; }
+.play-overlay.is-playing .play-circle .icon-pause { display: block; }
+.play-label {
   position: absolute;
-  right: 14px;
-  bottom: 14px;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid var(--line-strong);
-  background: rgba(0, 0, 0, .6);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  color: var(--mark);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: background-color .14s ease, border-color .14s ease;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .8);
 }
-.video-toggle:hover { background: rgba(0, 0, 0, .85); border-color: #3d3d3d; }
-.video-toggle svg { width: 14px; height: 14px; display: block; }
-.video-toggle .icon-play { margin-left: 2px; }
 
 /* ============================================================
    4. Download modals (unsigned first-launch guides)
@@ -527,5 +527,5 @@ a { color: inherit; }
 /* Respect reduced motion: no smooth scroll; the video is handled in JS */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .dl-btn, .btn, .vid-row, .nav-cta, .play-circle, .video-toggle { transition: none; }
+  .dl-btn, .btn, .vid-row, .nav-cta, .play-circle, .play-overlay { transition: none; }
 }
