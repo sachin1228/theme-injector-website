@@ -290,6 +290,30 @@ a { color: inherit; }
 .play-circle svg { width: 20px; height: 20px; display: block; margin-left: 3px; }
 .play-label { font-size: 13px; font-weight: 500; color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .8); }
 
+/* play/pause control pinned to the frame corner — always visible */
+.video-toggle {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: rgba(0, 0, 0, .6);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--mark);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color .14s ease, border-color .14s ease;
+}
+.video-toggle:hover { background: rgba(0, 0, 0, .85); border-color: #3d3d3d; }
+.video-toggle svg { width: 14px; height: 14px; display: block; }
+.video-toggle .icon-play { margin-left: 2px; }
+
 /* ============================================================
    4. Download modals (unsigned first-launch guides)
    ============================================================ */
@@ -529,5 +553,5 @@ a { color: inherit; }
 /* Respect reduced motion: no smooth scroll; the video is handled in JS */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .dl-btn, .btn, .vid-row, .nav-cta, .play-circle { transition: none; }
+  .dl-btn, .btn, .vid-row, .nav-cta, .play-circle, .video-toggle { transition: none; }
 }

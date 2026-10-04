@@ -45,7 +45,7 @@
 
       <h1>Freebuff, in your colors.</h1>
 
-      <p class="sub">A one-switch theme engine for the Freebuff desktop app. Turn it on and a Themes panel appears in Freebuff&rsquo;s sidebar — Freebuff&rsquo;s default plus eight hand-tuned themes like Figma, Linear, Netflix and Spotify. Live switching, zero config.</p>
+      <p class="sub">A one-switch theme engine for the Freebuff desktop app.</p>
 
       <!-- Downloads are served from GitHub Releases (see scripts/publish-github.sh). -->
       <div class="cta-row" id="download">
@@ -105,6 +105,15 @@
             </span>
             <span class="play-label">Play preview · 19&thinsp;s</span>
           </span>
+        </button>
+        <button class="video-toggle" id="videoToggle" type="button" aria-label="Pause preview">
+          <svg class="icon-pause" id="iconPause" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <rect x="3" y="2.5" width="3.4" height="11" rx="1.1"/>
+            <rect x="9.6" y="2.5" width="3.4" height="11" rx="1.1"/>
+          </svg>
+          <svg class="icon-play" id="iconPlay" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" hidden>
+            <path d="M4 2.5 13.5 8 4 13.5z"/>
+          </svg>
         </button>
       </div>
     </div>

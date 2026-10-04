@@ -45,14 +45,24 @@
      poster and expose a play button instead. */
   var video = document.getElementById('heroVideo');
   var overlay = document.getElementById('playOverlay');
+  var toggle = document.getElementById('videoToggle');
+  var iconPlay = document.getElementById('iconPlay');
+  var iconPause = document.getElementById('iconPause');
 
   function showOverlay() { if (overlay) overlay.hidden = false; }
   function hideOverlay() { if (overlay) overlay.hidden = true; }
 
+  /* corner play/pause control: icon + label follow the real state */
+  function setToggle(playing) {
+    if (toggle) toggle.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
+    if (iconPlay) iconPlay.hidden = playing;
+    if (iconPause) iconPause.hidden = !playing;
+  }
+
   if (video) {
-    video.addEventListener('playing', hideOverlay);
-    video.addEventListener('pause', showOverlay);
-    video.addEventListener('error', showOverlay);
+    video.addEventListener('playing', function () { hideOverlay(); setToggle(true); });
+    video.addEventListener('pause', function () { showOverlay(); setToggle(false); });
+    video.addEventListener('error', function () { showOverlay(); setToggle(false); });
 
     if (reduceMotion) {
       video.removeAttribute('autoplay');
@@ -60,13 +70,24 @@
       showOverlay();
     } else {
       var pr = video.play();
-      if (pr && pr.catch) pr.catch(showOverlay); // autoplay refused -> offer the button
+      if (pr && pr.catch) pr.catch(function () { showOverlay(); setToggle(false); }); // autoplay refused -> offer the button
     }
 
     if (overlay) {
       overlay.addEventListener('click', function () {
         var p = video.play();
         if (p && p.catch) p.catch(function () {});
+      });
+    }
+
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        if (video.paused) {
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        } else {
+          video.pause();
+        }
       });
     }
   }
