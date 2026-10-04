@@ -112,6 +112,7 @@ a { color: inherit; }
   height: 32px;
   display: inline-flex;
   align-items: center;
+  gap: 7px;
   padding: 0 13px;
   background: var(--mark);
   color: var(--bg);
@@ -121,6 +122,7 @@ a { color: inherit; }
   text-decoration: none;
   transition: background-color .14s ease;
 }
+.nav-cta svg { width: 15px; height: 15px; flex: 0 0 auto; display: block; }
 .nav-cta:hover { background: #fff; }
 
 /* ============================================================
@@ -138,7 +140,9 @@ a { color: inherit; }
 
 /* Square grid behind the hero: 1px lines fading out + a faint top glow.
    Reaches up behind the translucent nav (which blurs whatever is under it)
-   and down past the copy, so the squares read as one field, not a band. */
+   and down past the copy, so the squares read as one field, not a band.
+   Alpha is deliberately high: at .055 the lines measured ~13/255 on screen,
+   which is invisible on a bright display and in screenshots. */
 .hero-backdrop {
   position: absolute;
   z-index: 0;
@@ -148,11 +152,11 @@ a { color: inherit; }
   right: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, .12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .12) 1px, transparent 1px);
   background-size: 56px 56px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 95%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 98%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 98%);
 }
 .hero-backdrop::after {
   content: "";
@@ -220,7 +224,9 @@ a { color: inherit; }
    3. Hero media — the app, actually running
    ============================================================ */
 .hero-media {
-  max-width: 1060px;
+  /* the recording is a 1600x1000 capture; 800px is its native 1:2 scale,
+     which keeps the UI in it legible without dominating the page */
+  max-width: 800px;
   margin: 56px auto 0;
 }
 
@@ -285,7 +291,9 @@ a { color: inherit; }
   box-shadow: 0 8px 32px rgba(0, 0, 0, .55);
 }
 .play-overlay:hover .play-circle { background: #fff; }
-.play-circle svg { width: 20px; height: 20px; display: block; }
+.play-circle svg { width: 20px; height: 20px; display: block; grid-area: 1 / 1; }
+/* Both glyphs live in the same grid cell, so even if one fails to hide they
+   overlap in the centre instead of stacking into two rows. */
 /* which glyph shows is driven purely by the .is-playing class: SVG elements
    have no `hidden` IDL property, so setting one in JS would do nothing */
 .play-circle .icon-play { margin-left: 3px; }

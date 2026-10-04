@@ -46,20 +46,28 @@
   var overlay = document.getElementById('playOverlay');
   var playLabel = document.getElementById('playLabel');
 
-  /* The .is-playing class is the single source of truth: CSS swaps the play
-     glyph for the pause glyph, clears the scrim and hides the caption.
+  /* The .is-playing class is the single source of truth: CSS clears the scrim
+     and hides the caption. The two glyphs are ALSO switched inline, because a
+     browser serving a stale cached stylesheet would otherwise leave both the
+     play triangle and the pause bars painted at once.
      (Toggling `.hidden` on the <svg> icons would be a no-op — SVG elements
      have no such IDL property.) */
+  var iconPlay = document.getElementById('iconPlay');
+  var iconPause = document.getElementById('iconPause');
+
   function setPlayingUI(playing) {
     if (!overlay) return;
     if (playing) overlay.classList.add('is-playing');
     else overlay.classList.remove('is-playing');
+    if (iconPlay) iconPlay.style.display = playing ? 'none' : 'block';
+    if (iconPause) iconPause.style.display = playing ? 'block' : 'none';
     overlay.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
   }
 
-  /* While playing, the control is hidden by CSS and only a live pointer
-     brings it back — and it fades out again after a moment of stillness so
-     a resting cursor doesn't keep it on screen. */
+  /* While the recording plays the control steps out of the way: it shows for
+     a moment after the press — so the pause button is visibly there — and
+     then fades out. A moving pointer brings it back for the same beat. */
+  var HIDE_AFTER = 2000;
   var hideControlsTimer;
 
   function revealControls() {
@@ -68,7 +76,7 @@
     clearTimeout(hideControlsTimer);
     hideControlsTimer = setTimeout(function () {
       overlay.classList.remove('show-controls');
-    }, 2400);
+    }, HIDE_AFTER);
   }
 
   function dropControls() {
@@ -79,7 +87,9 @@
   if (video && overlay) {
     video.addEventListener('playing', function () {
       setPlayingUI(true);
-      dropControls();
+      /* never autoplay, and if something else started it, make sure the
+         poster state is consistent before the control fades away */
+      revealControls();
       /* replaying from the start: the caption goes back to plain "Play" */
       if (playLabel) playLabel.textContent = 'Play preview · 19 s';
     });
@@ -101,6 +111,17 @@
         video.pause();
       }
     });
+
+    /* A muted recording that keeps running off-screen feels like the page
+       playing itself, so the preview stops when its frame scrolls away. */
+    if ('IntersectionObserver' in window) {
+      var frame = video.closest('.video-frame') || video;
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting && !video.paused) { video.pause(); dropControls(); }
+        });
+      }, { threshold: 0.25 }).observe(frame);
+    }
   }
 
   /* ---------------- download modals ---------------- */
